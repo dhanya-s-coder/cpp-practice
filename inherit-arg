@@ -1,0 +1,43 @@
+#include<iostream>
+using namespace std;
+class base1{
+    protected:
+    int i;
+    public:
+    base1(int x){
+        i=x;
+        cout<<"base1 constructed\n";
+        cout<<i<<"\n";
+    }
+    ~base1(){
+        cout<<"base1 destructed\n";
+    }
+};
+class base2{
+    protected:
+    int j;
+    public:
+    base2(int x){
+        j=x;
+        cout<<"base2 constructed\n";
+        cout<<j<<"\n";
+    }
+    ~base2(){
+        cout<<"base2 destructed\n";
+    }
+};
+class derived:public base1 ,public base2{
+    
+    public:
+   derived(int x,int y):base1(x),base2(y){
+       cout<<"derived constructed\n";
+   }
+   ~derived(){
+        cout<<"derived destructed\n";
+   }
+    
+};
+int main(){
+    derived ob(4,5);
+
+}
