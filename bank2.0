@@ -1,0 +1,154 @@
+#include <iostream>
+#include <cstring>
+using namespace std;
+
+class Bank {
+    int accNo;
+    char holder1[50];
+    char holder2[50];
+    bool hasSecondHolder;
+    float balance;
+
+public:
+    Bank() {
+        accNo = -1;
+        balance = 0;
+        hasSecondHolder = false;
+    }
+
+    void create(int accNo, char *h1, char *h2, float init) {
+        this->accNo = accNo;
+        strcpy(this->holder1, h1);
+        if (strlen(h2) > 0) {
+            strcpy(this->holder2, h2);
+            hasSecondHolder = true;
+        } else {
+            hasSecondHolder = false;
+        }
+        this->balance = init;
+    }
+
+    int getAccNo() { return accNo; }
+
+    void deposit(float amount) {
+        this->balance += amount;
+    }
+
+    void withdraw(float amount, char* name) {
+        bool authorized = false;
+        if (strcmp(this->holder1, name) == 0) authorized = true;
+        if (hasSecondHolder && strcmp(this->holder2, name) == 0) authorized = true;
+
+        if (!authorized) {
+            cout << "Authorization failed!!\n";
+            return;
+        }
+
+        if (amount <= this->balance) {
+            this->balance -= amount;
+            cout << "Withdrawal Successful!\n";
+        } else {
+            cout << "Insufficient Balance\n";
+        }
+    }
+
+    void showDetails() {
+        cout << "Account Number: " << this->accNo << "\n";
+        cout << "Holders: " << this->holder1;
+        if (hasSecondHolder) cout << ", " << this->holder2;
+        cout << "\nBalance: " << this->balance << "\n\n";
+    }
+};
+
+int main() {
+    Bank accounts[10];
+    int count = 0;
+    int choice;
+
+    do {
+        cout << "\n===== BANK MENU =====\n";
+        cout << "1. Create Account (1 or 2 holders)\n";
+        cout << "2. Deposit\n";
+        cout << "3. Withdraw\n";
+        cout << "4. Show Details\n";
+        cout << "5. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        if (choice == 1) {
+            int accNo;
+            char h1[50], h2[50];
+            float init;
+            cout << "Enter Account Number: ";
+            cin >> accNo;
+            cout << "Enter First Holder Name: ";
+            cin >> h1;
+            cout << "Enter Second Holder Name (press 0 if none): ";
+            cin >> h2;
+            if (strcmp(h2,"0")==0) strcpy(h2,""); // no second holder
+            cout << "Enter Initial Balance: ";
+            cin >> init;
+            accounts[count].create(accNo, h1, h2, init);
+            count++;
+            cout << "Account Created Successfully!\n";
+        }
+        else if (choice == 2) {
+            int accNo;
+            float amt;
+            cout << "Enter Account Number: ";
+            cin >> accNo;
+            cout << "Enter Deposit Amount: ";
+            cin >> amt;
+            bool found = false;
+            for (int i = 0; i < count; i++) {
+                if (accounts[i].getAccNo() == accNo) {
+                    accounts[i].deposit(amt);
+                    cout << "Deposit Successful!\n";
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) cout << "Account Not Found!\n";
+        }
+        else if (choice == 3) {
+            int accNo;
+            float amt;
+            char name[50];
+            cout << "Enter Account Number: ";
+            cin >> accNo;
+            cout << "Enter Withdraw Amount: ";
+            cin >> amt;
+            cout << "Enter Your Name: ";
+            cin >> name;
+
+            bool found = false;
+            for (int i = 0; i < count; i++) {
+                if (accounts[i].getAccNo() == accNo) {
+                    accounts[i].withdraw(amt, name);
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) cout << "Account Not Found!\n";
+        }
+        else if (choice == 4) {
+            int accNo;
+            cout << "Enter Account Number: ";
+            cin >> accNo;
+            bool found = false;
+            for (int i = 0; i < count; i++) {
+                if (accounts[i].getAccNo() == accNo) {
+                    accounts[i].showDetails();
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) cout << "Account Not Found!\n";
+        }
+        else if (choice == 5) {
+            cout << "Exiting...\n";
+        }
+    } while (choice != 5);
+
+    return 0;
+}
