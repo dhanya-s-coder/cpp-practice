@@ -1,0 +1,79 @@
+#include <iostream>
+using namespace std;
+
+class Node {
+public:
+    int data;
+    Node* next;
+
+    Node(int data) {
+        this->data = data;      // parameter और member variable differentiate
+        this->next = NULL;
+    }
+};
+
+class List {
+    Node* head;
+
+public:
+    List() {
+        this->head = NULL;      // constructor में भी this का इस्तेमाल
+    }
+
+    void insertAtHead(int data) {
+        Node* newNode = new Node(data);
+
+        if (this->head == NULL) {
+            this->head = newNode;
+            return;
+        }
+
+        newNode->next = this->head;
+        this->head = newNode;
+    }
+
+    void printList() {
+        Node* temp = this->head;
+
+        if (this->head == NULL) {
+            cout << "List is empty\n";
+            return;
+        }
+
+        while (temp != NULL) {
+            cout << temp->data << " ";
+            temp = temp->next;
+        }
+        cout << "\n";
+    }
+
+    void deleteList() {
+        Node* temp = this->head;
+
+        while (this->head != NULL) {
+            temp = this->head;
+            this->head = this->head->next;
+            delete temp;
+        }
+        cout << "List deleted\n";
+    }
+
+    ~List() {
+        this->deleteList();  // destructor में भी this का use
+    }
+};
+
+int main() {
+    List l1;
+
+    // insert elements
+    for (int i = 1; i <= 5; i++) {
+        l1.insertAtHead(i);
+    }
+
+    // print
+    l1.printList();
+
+    // destructor automatically deleteList() call करेगा
+    return 0;
+}
