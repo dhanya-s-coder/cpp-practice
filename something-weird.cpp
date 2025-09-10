@@ -26,4 +26,7 @@ int main(){
     ob.a=40;
     ob.seti(10);
     //ob.i=30;
+     cout << "i = " << ob.geti() << endl;  // access through getter
+    cout << "j = " << ob.j << endl;
+    cout << "a = " << ob.a << endl;
 }
