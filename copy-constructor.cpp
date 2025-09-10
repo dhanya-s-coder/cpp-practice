@@ -7,6 +7,9 @@ class resource{
         data=new int(value);
         
     }
+    resource(const resource &obj){
+        data=new int(*obj.data);
+    }
     int getValue(){
         return *data;
         
@@ -22,6 +25,5 @@ int main(){
     resource res1(10);
     resource res2=res1;
     res1.setValue(20);
-    cout<<res1.getValue();
+    cout<<res1.getValue()<<res2.getValue();
 }
-
